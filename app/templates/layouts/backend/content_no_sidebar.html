@@ -1,0 +1,82 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Minton - Responsive Admin Dashboard Template</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!--Chartist Chart CSS -->
+        <link rel="stylesheet" href="../plugins/chartist/dist/chartist.min.css">
+
+        <!-- App css -->
+        <link href="{{ url_for('static', filename='backend/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='backend/css/icons.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='backend/css/style.css') }}" rel="stylesheet" type="text/css" />
+
+        <script src="{{ url_for('static', filename='backend/js/modernizr.min.js') }}"></script>
+
+    </head>
+
+    <body>
+
+        {% include 'layouts/backend/common/navbar.html' %}
+
+
+        <div class="wrapper">
+            <div class="container-fluid">
+
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="page-title-box">
+                            <div class="btn-group pull-right">
+                            </div>
+                            {% if title is defined %}
+                              <h4 class="page-title">{{ title }}</h4>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <!-- end page title end breadcrumb -->
+
+
+                {% block content %}{% endblock %}
+
+            </div> <!-- end container -->
+        </div>
+        <!-- end wrapper -->
+
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        2016 - 2017 © Minton - Coderthemes.com
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+
+
+        <!-- jQuery  -->
+        <script src="{{ url_for('static', filename='backend/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/js/popper.min.js') }}"></script><!-- Popper for Bootstrap --><!-- Tether for Bootstrap -->
+        <script src="{{ url_for('static', filename='backend/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/js/waves.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/js/jquery.slimscroll.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/js/jquery.scrollTo.min.js') }}"></script>
+
+        <!-- App js -->
+        <script src="{{ url_for('static', filename='backend/js/jquery.core.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/js/jquery.app.js') }}"></script>
+
+    </body>
+</html>

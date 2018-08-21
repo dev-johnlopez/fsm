@@ -1,3 +1,5 @@
 .git
 flask
 *.env
+migrations
+app.db

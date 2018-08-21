@@ -1,6 +1,6 @@
 from app import db
 from app.mixins import SearchableMixin
-from app.src.util import StringUtil
+from app.src.util.string_util import StringUtil
 
 class Contact(SearchableMixin, db.Model):
     __searchable__ = ['name']
@@ -55,3 +55,10 @@ class Company(Contact):
 
     def __repr__(self):
         return self.name
+
+class ContactAddress(db.Model):
+    __tablename__ = 'contactaddress'
+    id = db.Column(db.Integer, primary_key=True)
+    contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+    address = db.relationship("Address", uselist=False)
+    type = db.Column(db.String(255))

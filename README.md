@@ -1,3 +1,3 @@
-# Welcome to Microblog!
+# Welcome to FSM
 
-This is an example application featured in my [Flask Mega-Tutorial](https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world). See the tutorial for instructions on how to work with it.
+This application is a work in progress on how to manage wholesale real estate transactions & contacts.

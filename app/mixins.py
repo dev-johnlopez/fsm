@@ -30,6 +30,11 @@ class StateMixin(object):
     def init_state_machine(cls, obj, *args, **kwargs):
         # when we load data from the DB(via query) we need to set the proper initial state
         initial = obj.status or 'new'
+        states = ['new', 'active', 'closed']
+        transitions = [
+            ['activate', 'new', 'active'],
+            ['close', 'active', 'closed']
+        ]
 
         machine = Machine(model=obj, states=states, transitions=transitions, initial=initial,
                           after_state_change='after_state_change')

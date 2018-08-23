@@ -13,18 +13,6 @@ migrate = Migrate()
 security = Security()
 admin = Admin()
 
-
-
-#db.session.add(deal)
-#db.session.commit()
-#db.session.add(deal)
-#db.session.commit()
-#print(deal.state)
-#deal.validated()
-
-#print(deal.state)
-# output: validated
-
 def create_app(config_class=Config):
         app = Flask(__name__)
         app.config.from_object(config_class)

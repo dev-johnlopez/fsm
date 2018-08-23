@@ -18,7 +18,6 @@ class Contact(SearchableMixin, db.Model):
     }
 
     def __init__(self, **kwargs):
-        print("******** constructing!")
         self.addresses = []
         super(Contact, self).__init__(**kwargs)
 
@@ -67,5 +66,5 @@ class ContactAddress(db.Model):
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
     contact = db.relationship("Contact", back_populates="addresses")
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
-    address = db.relationship("Address", back_populates="contact_address")
+    address = db.relationship("Address")
     type = db.Column(db.String(255))

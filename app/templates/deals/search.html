@@ -1,0 +1,44 @@
+{% set active_page = "search" %}
+
+{% extends 'deals/layouts/template.html' %}
+{% block content %}
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Search</h5>
+        <hr />
+        {% include 'deals/forms/search.html' %}
+      </div>
+    </div>
+  </div>
+  {% if results|length > 0 %}
+    <div class="row-fluid mt-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Results ({{ results|length }})</h5>
+          <table class="table mb-0 table-responsive datatable">
+              <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Address</th>
+                    <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for result in results %}
+                  <tr>
+                      <td>{{ loop.index }}</td>
+                      <td><a href="{{ url_for('deals.view', deal_id=result.id) }}">{{ result.property.address }}</a></td>
+                      <td class="actions">
+                          <a href="{{ url_for('deals.edit', deal_id=result.id ) }}" class="on-default edit-row" data-toggle="tooltip" data-placement="top" title="" data-original-title="Edit"><i class="fa fa-pencil"></i></a>
+                          <a href="{{ url_for('deals.delete', deal_id=result.id ) }}" class="on-default remove-row" data-toggle="tooltip" data-placement="top" title="" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+                      </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}

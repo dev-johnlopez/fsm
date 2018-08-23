@@ -1,0 +1,13 @@
+<form class="form-horizontal" method="post">
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Address Info</h5>
+        <hr />
+        {% with form = form.property.address %}
+        {% include 'deals/forms/address.html' %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+</form>

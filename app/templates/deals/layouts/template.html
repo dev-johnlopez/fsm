@@ -1,34 +1,28 @@
-
 {% include 'layouts/backend/common/header.html' %}
 
     <body>
 
         {% include 'layouts/backend/common/navbar.html' %}
 
-
         <div class="wrapper">
             <div class="container-fluid">
-
-                <!-- Page-Title -->
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="page-title-box">
-                            <div class="btn-group pull-right">
-                            </div>
-                            {% if title is defined %}
-                              <h4 class="page-title">{{ title }}</h4>
-                            {% endif %}
-                        </div>
-                    </div>
+              <nav class="col-md-2 d-block d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    {% include 'deals/layouts/sidebar/sidebar.html' %}
                 </div>
-                <!-- end page title end breadcrumb -->
+              </nav>
 
-
+              <div class="col-md-9 ml-sm-auto col-lg-10">
+                {% include 'layouts/backend/common/flash_messages.html' %}
                 {% block content %}{% endblock %}
-
+              </div>
+            </div>
             </div> <!-- end container -->
         </div>
         <!-- end wrapper -->
+
+
+        {% include 'layouts/backend/common/footer.html' %}
 
 
         <!-- jQuery  -->

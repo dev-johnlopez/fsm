@@ -1,0 +1,49 @@
+<form class="form-horizontal" role="form" method="POST">
+  {{ form.hidden_tag() }}
+  <div class="row">
+    <div class="col-sm-6">
+      <h6>Address</h6>
+      <div class="form-group row">
+        <label for="street-address" class="col-3 col-form-label">Street Address</label>
+        <div class="col-9">
+            {{ form.line_1(type="text", class="form-control", placeholder="123 Fake St") }}
+            {#<input type="text" class="form-control" id="street-address" placeholder="Email">#}
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="street-address" class="col-3 col-form-label">City</label>
+        <div class="col-9">
+          {{ form.city(type="text", class="form-control", placeholder="Chicago") }}
+          {#  <input type="text" class="form-control" id="street-address" placeholder="Email">#}
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="street-address" class="col-3 col-form-label">State</label>
+        <div class="col-9">
+          {{ form.state_province(type="text", class="form-control", placeholder="IL") }}
+          {# <input type="text" class="form-control" id="street-address" placeholder="Email">#}
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="street-address" class="col-3 col-form-label">Zip Code</label>
+        <div class="col-9">
+          {{ form.postal_code(type="text", class="form-control", placeholder="60657") }}
+          {#  <input type="text" class="form-control" id="street-address" placeholder="Email">#}
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <h6>Owner</h6>
+      <div class="form-group row">
+        <label for="street-address" class="col-3 col-form-label">Name</label>
+        <div class="col-9">
+            {{ form.name(type="text", class="form-control", placeholder="John Smith") }}
+            {#<input type="text" class="form-control" id="street-address" placeholder="Email">#}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row pull-right">
+    <button type="submit" class="btn btn-primary">Search</button>
+  </div>
+</form>

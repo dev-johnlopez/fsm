@@ -5,13 +5,27 @@ from app.mixins import StateMixin
 class Deal(StateMixin, db.Model):
     __tablename__ = 'deal'
     id = db.Column(db.Integer, primary_key=True)
+    list_price = db.Column(db.Integer)
+    rehab_amount = db.Column(db.Integer)
+    after_repair_value = db.Column(db.Integer)
     equity = db.Column(db.Integer)
+    return_on_investment = db.Column(db.String(255))
+    monthly_rent = db.Column(db.Integer)
+    taxes = db.Column(db.Integer)
+    insurance = db.Column(db.Integer)
+    maintenance_percent = db.Column(db.Integer)
+    management_percent = db.Column(db.Integer)
+    utility_amount = db.Column(db.Integer)
+    utility_description = db.Column(db.String(255))
+    capex_reserves = db.Column(db.Integer)
+    net_operating_income = db.Column(db.Integer)
+    cap_rate = db.Column(db.String(255))
     property_id = db.Column(db.Integer, db.ForeignKey('property.id'))
     property = db.relationship('Property', uselist=False)
     contacts = db.relationship('DealContact', backref='deal', lazy=True)
 
     def __repr__(self):
-        return self.property
+        return str(self.property)
 
     def addOwnerToDeal(self, contact):
         role = DealContactRole(name="Owner")
@@ -46,6 +60,9 @@ class Property(db.Model):
     address = db.relationship('Address', uselist=False)
     sq_feet = db.Column(db.Integer)
     bedrooms = db.Column(db.Integer)
+    bathrooms = db.Column(db.Integer)
+    basement_type = db.Column(db.String(255))
+    garage_type = db.Column(db.String(255))
     last_sale_date = db.Column(db.Date)
     owner_occupied = db.Column(db.Boolean)
 

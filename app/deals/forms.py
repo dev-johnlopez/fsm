@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, FormField, BooleanField
+from wtforms import StringField, IntegerField, FormField, BooleanField, TextAreaField
+from wtforms.validators import DataRequired
 
 class AddressForm(FlaskForm):
     line_1 = StringField('Street Address', validators=[])
@@ -18,7 +19,28 @@ class SearchForm(FlaskForm):
 class PropertyForm(FlaskForm):
     address = FormField(AddressForm)
     owner_occupied = BooleanField()
+    bedrooms = IntegerField('Bedrooms', validators=[])
+    bathrooms = IntegerField('Bedrooms', validators=[])
+    sq_feet = IntegerField('Sq. Feet', validators=[])
 
 class DealForm(FlaskForm):
-    equity = IntegerField('Equity %', validators=[])
     property = FormField(PropertyForm)
+    list_price = IntegerField('List Price', validators=[])
+    rehab_amount = IntegerField('Rehab Est.', validators=[])
+    after_repair_value = IntegerField('ARV', validators=[])
+    equity = IntegerField('Equity', validators=[])
+    return_on_investment = StringField('ROI', validators=[])
+    monthly_rent = IntegerField('Monthly Rent', validators=[])
+    taxes = IntegerField('Taxes', validators=[])
+    insurance = IntegerField('Insurance', validators=[])
+    maintenance_percent = IntegerField('Maintenance', validators=[])
+    management_percent = IntegerField('Management', validators=[])
+    utility_amount = IntegerField('Utilities', validators=[])
+    utility_description = StringField('Desc. of Utilities', validators=[])
+    capex_reserves = IntegerField('Capex', validators=[])
+    net_operating_income = IntegerField('NOI', validators=[])
+    cap_rate = StringField('Cap Rate', validators=[])
+
+class MarketDealForm(FlaskForm):
+    subject = StringField('Subject', validators=[DataRequired()])
+    body = TextAreaField('Body', validators=[DataRequired()])

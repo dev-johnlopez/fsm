@@ -1,7 +1,7 @@
 from flask import g, render_template, flash, redirect, url_for, request
 from app import db
 from app.deals import bp
-from app.deals.forms import SearchForm, DealForm
+from app.deals.forms import SearchForm, DealForm, PropertyForm, MarketDealForm
 from app.deals.models import Deal, DealContact, DealContactRole, Property, Address
 from app.crm.models import Contact
 from sqlalchemy.orm import join
@@ -10,18 +10,66 @@ from sqlalchemy.orm import join
 def index():
     return render_template('deals/index.html', title='Dashboard')
 
-@bp.route('/create')
+@bp.route('/create', methods=['GET', 'POST'])
 def create():
     form = DealForm()
+    if form.validate_on_submit():
+        deal = Deal()
+        deal.property = Property()
+        deal.property.address = Address()
+        form.populate_obj(deal)
+        db.session.add(deal)
+        db.session.commit()
+        return redirect(url_for('deals.view', deal_id=deal.id))
+    elif len(form.errors):
+        for error in form.errors:
+            flash(''.format(error), 'error')
     return render_template('deals/create.html', title='Create', form=form)
 
-@bp.route('/<deal_id>')
+@bp.route('/<deal_id>', methods=['GET', 'POST'])
 def view(deal_id):
-    return render_template('deals/index.html', title='View')
+    deal = Deal.query.get(deal_id)
+    form = DealForm(obj=deal)
+    if form.validate_on_submit():
+        form.populate_obj(deal)
+        db.session.add(deal)
+        db.session.commit()
+        flash('Your updates have been saved.', 'info')
+    elif len(form.errors):
+        for error in form.errors:
+            flash(''.format(str(error)), 'error')
+    return render_template('deals/view.html', title='View', deal=deal, form=form)
+
+@bp.route('/<deal_id>/email', methods=['GET', 'POST'])
+def email(deal_id):
+    deal = Deal.query.get(deal_id)
+    form = MarketDealForm()
+    if form.validate_on_submit():
+        print("**************")
+        print("**************")
+        print("**************")
+        flash(form.body.data, 'info')
+        print("**************")
+        print("**************")
+        print("**************")
+    elif len(form.errors):
+        for error in form.errors:
+            flash(''.format(str(error)), 'error')
+    return render_template('deals/email.html', title='Email', deal=deal, form=form)
 
 @bp.route('/<deal_id>/edit')
 def edit(deal_id):
-    return render_template('deals/index.html', title='Edit')
+    deal = Deal.query.get(deal_id)
+    form = DealForm(obj=deal)
+    if form.validate_on_submit():
+        form.populate_obj(deal)
+        db.session.add(deal)
+        db.session.commit()
+        return redirect(url_for('deals.summary', deal_id=deal.id))
+    elif len(form.errors):
+        for error in form.errors:
+            flash(''.format(error), 'error')
+    return render_template('deals/create.html', title='Create', form=form, deal=deal)
 
 @bp.route('/<deal_id>/delete')
 def delete(deal_id):

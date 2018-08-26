@@ -1,0 +1,36 @@
+{% set active_page = "summary" %}
+{% extends 'deals/layouts/template.html' %}
+{% block content %}
+<div class="row-fluid mt-3">
+  <h1>{{ deal }}</h1>
+</div>
+
+<div class="row-fluid mt-3">
+
+  <div class="card-box">
+    <h4 class="m-t-0 m-b-20 header-title"><b>Markers</b></h4>
+    <div class="row">
+      <div class="col-sm-6">
+        <div id="gmaps-markers" class="gmaps"></div>
+      </div>
+      <div class="col-sm-6">
+        <form method="post" class="form-horizontal">
+          {{ form.hidden_tag() }}
+          {% with form = form.property.address %}
+          {% include 'deals/forms/address.html' %}
+          {% endwith %}
+          {% with form = form.property %}
+          {% include 'deals/forms/property.html' %}
+          {% endwith %}
+          <div class="row-fluid pull-right">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}

@@ -33,9 +33,27 @@
         <script src="{{ url_for('static', filename='backend/js/jquery.slimscroll.js') }}"></script>
         <script src="{{ url_for('static', filename='backend/js/jquery.scrollTo.min.js') }}"></script>
 
+        {% if summernote %}
+          <script src="{{ url_for('static', filename='backend/plugins/summernote/summernote.min.js') }}"></script>
+        {% endif %}
         <!-- App js -->
         <script src="{{ url_for('static', filename='backend/js/jquery.core.js') }}"></script>
         <script src="{{ url_for('static', filename='backend/js/jquery.app.js') }}"></script>
+
+        {% if summernote %}
+        <script>
+            jQuery(document).ready(function () {
+
+                $('.summernote').summernote({
+                    height: 350,                 // set editor height
+                    minHeight: null,             // set minimum height of editor
+                    maxHeight: null,             // set maximum height of editor
+                    focus: false                 // set focus to editable area after initializing summernote
+                });
+            });
+        </script>
+        {% endif %}
+
 
     </body>
 </html>

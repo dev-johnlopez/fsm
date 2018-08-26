@@ -1,8 +1,13 @@
-{% set active_page = "create" %}
+{% if deal is defined %}
+  {% set active_page = "edit" %}
+{% else %}
+  {% set active_page = "create" %}
+{% endif %}
 
 {% extends 'deals/layouts/template.html' %}
 {% block content %}
-
-{% include 'deals/forms/deal.html' %}
-
+<form class="form-horizontal" method="post">
+  {{ form.hidden_tag() }}
+  {% include 'deals/forms/deal.html' %}
+</form>
 {% endblock %}

@@ -1,0 +1,13 @@
+{% if contact is defined %}
+  {% set active_page = "edit" %}
+{% else %}
+  {% set active_page = "create" %}
+{% endif %}
+
+{% extends 'crm/layouts/template.html' %}
+{% block content %}
+<form class="form-horizontal" method="post">
+  {{ form.hidden_tag() }}
+  {% include 'crm/forms/contact.html' %}
+</form>
+{% endblock %}

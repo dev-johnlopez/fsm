@@ -10,8 +10,14 @@
 
         <link rel="shortcut icon" href="assets/images/favicon.ico">
 
+        {% if chart %}
         <!--Chartist Chart CSS -->
         <link rel="stylesheet" href="../plugins/chartist/dist/chartist.min.css">
+        {% endif %}
+
+        {% if summernote %}
+          <link rel="stylesheet" href="{{ url_for('static', filename='backend/plugins/summernote/summernote.css') }}">
+        {% endif %}
 
         <!-- App css -->
         <link href="{{ url_for('static', filename='backend/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />

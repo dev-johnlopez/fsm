@@ -1,0 +1,19 @@
+{{ form.hidden_tag() }}
+<div class="form-group row">
+  <label for="street-address" class="col-3 col-form-label">Bedrooms</label>
+  <div class="col-9">
+      {{ form.bedrooms(type="text", class="form-control", placeholder="") }}
+  </div>
+</div>
+<div class="form-group row">
+  <label for="street-address" class="col-3 col-form-label">Bathrooms</label>
+  <div class="col-9">
+      {{ form.bathrooms(type="text", class="form-control", placeholder="") }}
+  </div>
+</div>
+<div class="form-group row">
+  <label for="street-address" class="col-3 col-form-label">Sq. Feet</label>
+  <div class="col-9">
+      {{ form.sq_feet(type="text", class="form-control", placeholder="") }}
+  </div>
+</div>

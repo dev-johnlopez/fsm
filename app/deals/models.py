@@ -56,7 +56,7 @@ class Property(db.Model):
     __tablename__ = 'property'
     id = db.Column(db.Integer, primary_key=True)
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
-    type = db.Column(db.String(255))
+    property_type = db.Column(db.String(50))
     address = db.relationship('Address', uselist=False)
     sq_feet = db.Column(db.Integer)
     bedrooms = db.Column(db.Integer)
@@ -66,8 +66,78 @@ class Property(db.Model):
     last_sale_date = db.Column(db.Date)
     owner_occupied = db.Column(db.Boolean)
 
+    __mapper_args__ = {
+        'polymorphic_identity':'unknown',
+        'polymorphic_on':property_type
+    }
+
     def __repr__(self):
         return str(self.address)
+
+class ResidentialProperty(Property):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'residential'
+    }
+
+    def __init__(self, **kwargs):
+        super(ResidentialProperty, self).__init__(**kwargs)
+
+
+class SingleFamilyProperty(ResidentialProperty):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'sfr'
+    }
+
+    def __init__(self, **kwargs):
+        super(SingleFamilyProperty, self).__init__(**kwargs)
+
+class ResidentialMultiFamilyProperty(ResidentialProperty):
+    units = db.Column(db.Integer)
+
+    __mapper_args__ = {
+        'polymorphic_identity':'residential_multi_family'
+    }
+
+    def __init__(self, **kwargs):
+        super(ResidentialMultiFamilyProperty, self).__init__(**kwargs)
+
+class CommercialProperty(Property):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'commercial'
+    }
+
+    def __init__(self, **kwargs):
+        super(CommercialProperty, self).__init__(**kwargs)
+
+class CommercialMultiFamilyProperty(CommercialProperty):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'commercial_multi_family'
+    }
+
+    def __init__(self, **kwargs):
+        super(CommercialMultiFamilyProperty, self).__init__(**kwargs)
+
+class SelfStorageProperty(CommercialProperty):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'self_storage'
+    }
+
+    def __init__(self, **kwargs):
+        super(SingleFamilyProperty, self).__init__(**kwargs)
+
+class RetailProperty(CommercialProperty):
+
+    __mapper_args__ = {
+        'polymorphic_identity':'retail'
+    }
+
+    def __init__(self, **kwargs):
+        super(SingleFamilyProperty, self).__init__(**kwargs)
 
 
 #import enum

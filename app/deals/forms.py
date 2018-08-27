@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, FormField, BooleanField, TextAreaField
+from wtforms import StringField, IntegerField, FormField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired
 
 class AddressForm(FlaskForm):
@@ -19,6 +19,13 @@ class SearchForm(FlaskForm):
 class PropertyForm(FlaskForm):
     address = FormField(AddressForm)
     owner_occupied = BooleanField()
+    property_type = SelectField('Property Type', choices=[
+                                        ('sfr', 'Single Family'),
+                                        ('residential_multi_family', 'Residential Multi Family'),
+                                        ('commercial_multi_family', 'Commercial Multi Fmaily'),
+                                        ('self_storage', 'Self Storage'),
+                                        ('retail', 'Retail')],
+                            validators=[DataRequired()])
     bedrooms = IntegerField('Bedrooms', validators=[])
     bathrooms = IntegerField('Bedrooms', validators=[])
     sq_feet = IntegerField('Sq. Feet', validators=[])

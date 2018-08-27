@@ -115,8 +115,8 @@
                           <li class="hide-phone app-search">
                               {#<form role="search" class="form-inline" method="get" action="{{ url_for('main.search') }}">
                                 {{ g.search_form.q(size=20, class='form-control', placeholder='Search...') }}
-                                  {#<input type="text" placeholder="Search..." class="form-control">#}
-                                  {#<button type="submit" class="btn btn-success waves-effect waves-light m-l-10 btn-md">Sign in</button>#}
+                                  <input type="text" placeholder="Search..." class="form-control">
+                                  <button type="submit" class="btn btn-success waves-effect waves-light m-l-10 btn-md">Sign in</button>
                                   <a type="submit" href=""><i class="fa fa-search"></i></a>
                               </form>#}
                           </li>

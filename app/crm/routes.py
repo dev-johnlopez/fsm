@@ -3,6 +3,7 @@ from app import db
 from app.crm import bp
 from app.crm.forms import ContactForm
 from app.crm.models import Contact
+from app.src.util import flashFormErrors
 
 @bp.route('/')
 def index():
@@ -21,6 +22,5 @@ def create():
         db.session.add(contact)
         db.session.commit()
     elif len(form.errors):
-        for error in form.errors:
-            flash(''.format(error), 'error')
+        flashFormErrors(form)
     return render_template('crm/create.html', title='Dashboard', form=form)

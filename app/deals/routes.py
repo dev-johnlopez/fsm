@@ -4,6 +4,7 @@ from app.deals import bp
 from app.deals.forms import SearchForm, DealForm, PropertyForm, MarketDealForm
 from app.deals.models import Deal, DealContact, DealContactRole, Property, Address
 from app.crm.models import Contact
+from app.src.util import flashFormErrors
 from sqlalchemy.orm import join
 
 @bp.route('/')
@@ -22,8 +23,7 @@ def create():
         db.session.commit()
         return redirect(url_for('deals.view', deal_id=deal.id))
     elif len(form.errors):
-        for error in form.errors:
-            flash(''.format(error), 'error')
+        flashFormErrors(form)
     return render_template('deals/create.html', title='Create', form=form)
 
 @bp.route('/<deal_id>', methods=['GET', 'POST'])
@@ -36,8 +36,7 @@ def view(deal_id):
         db.session.commit()
         flash('Your updates have been saved.', 'info')
     elif len(form.errors):
-        for error in form.errors:
-            flash(''.format(str(error)), 'error')
+        flashFormErrors(form)
     return render_template('deals/view.html', title='View', deal=deal, form=form)
 
 @bp.route('/<deal_id>/email', methods=['GET', 'POST'])
@@ -53,8 +52,7 @@ def email(deal_id):
         print("**************")
         print("**************")
     elif len(form.errors):
-        for error in form.errors:
-            flash(''.format(str(error)), 'error')
+        flashFormErrors(form)
     return render_template('deals/email.html', title='Email', deal=deal, form=form)
 
 @bp.route('/<deal_id>/edit')
@@ -67,8 +65,7 @@ def edit(deal_id):
         db.session.commit()
         return redirect(url_for('deals.summary', deal_id=deal.id))
     elif len(form.errors):
-        for error in form.errors:
-            flash(''.format(error), 'error')
+        flashFormErrors(form)
     return render_template('deals/create.html', title='Create', form=form, deal=deal)
 
 @bp.route('/<deal_id>/delete')
@@ -95,7 +92,6 @@ def search():
         if len(results) == 0:
             flash('No results found.', 'info')
     else:
-        for error in form.errors:
-            flash(''.format(error), 'error')
+        flashFormErrors(form)
 
     return render_template('deals/search.html', title='Search', results=results, form=form)

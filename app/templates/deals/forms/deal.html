@@ -28,92 +28,106 @@
         <hr />
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">List Price</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.list_price(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Rehab Est.</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.rehab_amount(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">ARV</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.after_repair_value(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Equity</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.equity(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">ROI</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
               {{ form.return_on_investment(type="text", class="form-control", placeholder="") }}
+              <span class="input-group-addon">%</span>
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Monthly Rent</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.monthly_rent(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Taxes</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.taxes(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Insurance</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.insurance(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Maintenance</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
               {{ form.maintenance_percent(type="text", class="form-control", placeholder="") }}
+              <span class="input-group-addon">%</span>
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Management</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
               {{ form.management_percent(type="text", class="form-control", placeholder="") }}
+              <span class="input-group-addon">%</span>
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Utilities</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.utility_amount(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Desc. of Utilities</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
               {{ form.utility_description(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Capex Reserves</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.capex_reserves(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">NOI</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
+              <span class="input-group-addon">$</span>
               {{ form.net_operating_income(type="text", class="form-control", placeholder="") }}
           </div>
         </div>
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Cap Rate</label>
-          <div class="col-9">
+          <div class="col-9 input-group">
               {{ form.cap_rate(type="text", class="form-control", placeholder="") }}
+              <span class="input-group-addon">%</span>
           </div>
         </div>
       </div>

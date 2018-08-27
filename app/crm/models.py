@@ -8,7 +8,7 @@ class Contact(SearchableMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
-    type = db.Column(db.String(50))
+    contact_type = db.Column(db.String(50))
     addresses = db.relationship("ContactAddress", back_populates="contact")
     phone = db.Column(db.String(20))
     email = db.Column(db.String(255))
@@ -22,7 +22,7 @@ class Contact(SearchableMixin, db.Model):
 
     __mapper_args__ = {
         'polymorphic_identity':'contact',
-        'polymorphic_on':type
+        'polymorphic_on':contact_type
     }
 
     def __init__(self, **kwargs):

@@ -4406,4 +4406,8 @@ File: Responsive
     text-transform: uppercase;
   }
 
+  .required {
+    color: red;
+  }
+
 /*# sourceMappingURL=style.css.map */

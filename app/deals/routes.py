@@ -2,7 +2,7 @@ from flask import g, render_template, flash, redirect, url_for, request
 from app import db
 from app.deals import bp
 from app.deals.forms import SearchForm, DealForm, PropertyForm, MarketDealForm
-from app.deals.models import Deal, DealContact, DealContactRole, Property, Address
+from app.deals.models import Deal, Property, Address
 from app.crm.models import Contact
 from app.src.util import flashFormErrors
 from sqlalchemy.orm import join
@@ -44,13 +44,7 @@ def email(deal_id):
     deal = Deal.query.get(deal_id)
     form = MarketDealForm()
     if form.validate_on_submit():
-        print("**************")
-        print("**************")
-        print("**************")
         flash(form.body.data, 'info')
-        print("**************")
-        print("**************")
-        print("**************")
     elif len(form.errors):
         flashFormErrors(form)
     return render_template('deals/email.html', title='Email', deal=deal, form=form)
@@ -86,8 +80,6 @@ def search():
             query = query.filter(Address.state_province.like('%' + form.state_province.data + '%'))
         if form.postal_code.data:
             query = query.filter(Address.postal_code.like('%' + form.postal_code.data + '%'))
-        if form.name.data:
-            query = query.join(DealContact).join(Contact).filter(Contact.name.like('%' + form.name.data + '%'))
         results = query.all()
         if len(results) == 0:
             flash('No results found.', 'info')

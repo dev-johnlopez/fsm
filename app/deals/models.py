@@ -22,7 +22,7 @@ class Deal(StateMixin, db.Model):
     cap_rate = db.Column(db.String(255))
     property_id = db.Column(db.Integer, db.ForeignKey('property.id'))
     property = db.relationship('Property', uselist=False)
-    contacts = db.relationship('DealContact', backref='deal', lazy=True)
+    #contacts = db.relationship('DealContact', backref='deal', lazy=True)
 
     def __repr__(self):
         return str(self.property)
@@ -37,19 +37,19 @@ class Deal(StateMixin, db.Model):
         self.contacts.append(dealContact)
 
 
-class DealContact(db.Model):
-    __tablename__ = 'dealcontact'
-    id = db.Column(db.Integer, primary_key=True)
-    deal_id = db.Column(db.Integer, db.ForeignKey('deal.id'))
-    address_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
-    contact = db.relationship('Contact', uselist=False)
-    roles = db.relationship('DealContactRole', backref='contact', lazy=True)
+#class DealContact(db.Model):
+#    __tablename__ = 'dealcontact'
+#    id = db.Column(db.Integer, primary_key=True)
+#    deal_id = db.Column(db.Integer, db.ForeignKey('deal.id'))
+#    address_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+#    contact = db.relationship('Contact', uselist=False)
+#    roles = db.relationship('DealContactRole', backref='contact', lazy=True)
 
-class DealContactRole(db.Model):
-    __tablename__ = 'dealcontactrole'
-    id = db.Column(db.Integer, primary_key=True)
-    deal_contact_id = db.Column(db.Integer, db.ForeignKey('dealcontact.id'))
-    name = db.Column(db.String(255), nullable=False)
+#class DealContactRole(db.Model):
+#    __tablename__ = 'dealcontactrole'
+#    id = db.Column(db.Integer, primary_key=True)
+#    deal_contact_id = db.Column(db.Integer, db.ForeignKey('dealcontact.id'))
+#    name = db.Column(db.String(255), nullable=False)
 
 
 class Property(db.Model):

@@ -20,6 +20,7 @@ class PropertyForm(FlaskForm):
     address = FormField(AddressForm)
     owner_occupied = BooleanField()
     property_type = SelectField('Property Type', choices=[
+                                        ('', ''),
                                         ('sfr', 'Single Family'),
                                         ('residential_multi_family', 'Residential Multi Family'),
                                         ('commercial_multi_family', 'Commercial Multi Fmaily'),
@@ -27,7 +28,7 @@ class PropertyForm(FlaskForm):
                                         ('retail', 'Retail')],
                             validators=[DataRequired()])
     bedrooms = IntegerField('Bedrooms', validators=[])
-    bathrooms = IntegerField('Bedrooms', validators=[])
+    bathrooms = IntegerField('Bathrooms', validators=[])
     sq_feet = IntegerField('Sq. Feet', validators=[])
 
 class DealForm(FlaskForm):

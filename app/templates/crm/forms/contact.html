@@ -19,13 +19,12 @@
         <div class="form-group row">
           <label for="street-address" class="col-3 col-form-label">Type<span class="required">*</span></label>
           <div class="col-9">
-            {% for subfield in form.type %}
+            {% for subfield in form.contact_type %}
               <div class="radio radio-primary">
                   {{ subfield }}
                   {{ subfield.label }}
               </div>
             {% endfor %}
-              {#{{ form.type(class="form-control") }}#}
           </div>
         </div>
         <div class="form-group row">
@@ -43,6 +42,37 @@
       </div>
     </div>
   </div>
+  {% for criteria in form.investment_criteria %}
+  {{ criteria.hidden_tag() }}
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ criteria.property_type() }}</h5>
+        <hr />
+        <div class="form-group row">
+          <label for="street-address" class="col-3 col-form-label">Invests in these properties?<span class="required">*</span></label>
+          <div class="col-9">
+            {{ criteria.enabled(class="form-control" )}}
+          </div>
+        </div>
+        {% if criteria.property_type.data == "residential_multi_family" or criteria.property_type.data == "commercial_multi_family" %}
+          <div class="form-group row">
+            <label for="street-address" class="col-3 col-form-label">{{ criteria.minimum_units.label }}</label>
+            <div class="col-9">
+              {{ criteria.minimum_units(class="form-control" )}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="street-address" class="col-3 col-form-label">{{ criteria.maximum_units.label }}</label>
+            <div class="col-9">
+              {{ criteria.maximum_units(class="form-control" )}}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
   <div class="row-fluid mt-3 pull-right">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>

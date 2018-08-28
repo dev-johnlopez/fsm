@@ -1,6 +1,8 @@
 from app import db
 from app.mixins import SearchableMixin
 from app.src.util.string_util import StringUtil
+from app.deals.models import Address
+from app import constants as CONSTANTS
 
 class Contact(SearchableMixin, db.Model):
     __searchable__ = ['first_name', 'last_name']
@@ -9,15 +11,11 @@ class Contact(SearchableMixin, db.Model):
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     contact_type = db.Column(db.String(50))
-    addresses = db.relationship("ContactAddress", back_populates="contact")
     phone = db.Column(db.String(20))
     email = db.Column(db.String(255))
     referral_source = db.Column(db.String(255))
     investment_strategy = db.Column(db.String(255))
-    propertytypecriteria_id = db.Column(db.Integer, db.ForeignKey('propertytypecriteria.id'))
-    property_type_criteria = db.relationship("PropertyTypeCriteria")
-    locationcriteria_id = db.Column(db.Integer, db.ForeignKey('locationcriteria.id'))
-    location_criteria = db.relationship("LocationCriteria")
+    investment_criteria = db.relationship("InvestmentCriteria")
 
 
     __mapper_args__ = {
@@ -30,7 +28,7 @@ class Contact(SearchableMixin, db.Model):
         super(Contact, self).__init__(**kwargs)
 
     def __repr__(self):
-        return self.name
+        return '{} {}'.format(self.first_name, self.last_name)
 
     @property
     def mailing_address(self):
@@ -94,27 +92,21 @@ class Lender(Contact):
     def __init__(self, **kwargs):
         super(Builder, self).__init__(**kwargs)
 
-class ContactAddress(db.Model):
-    __tablename__ = 'contactaddress'
+class InvestmentCriteria(db.Model):
+    __tablename__ = 'investmentcriteria'
     id = db.Column(db.Integer, primary_key=True)
     contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
-    contact = db.relationship("Contact", back_populates="addresses")
-    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
-    address = db.relationship("Address")
-    type = db.Column(db.String(255))
+    property_type = db.Column(db.Integer)
+    flip = db.Column(db.Boolean)
+    rental = db.Column(db.Boolean)
+    minimum_units = db.Column(db.Integer)
+    maximum_units = db.Column(db.Integer)
 
-class PropertyTypeCriteria(db.Model):
-    __tablename__ = 'propertytypecriteria'
-    id = db.Column(db.Integer, primary_key=True)
-    unknown = db.Column(db.Boolean)
-    single_family = db.Column(db.Boolean)
-    residential_multi_family = db.Column(db.Boolean)
-    small_multi_family = db.Column(db.Boolean)
-    medium_multi_family = db.Column(db.Boolean)
-    large_multi_family = db.Column(db.Boolean)
-    multi_family_complexes = db.Column(db.Boolean)
-    self_storage = db.Column(db.Boolean)
-    retail = db.Column(db.Boolean)
+    def getPropertyType(self):
+          return CONSTANTS.PROPERTY_TYPE[self.property_type]
+
+    def getRole(self):
+      return USER.ROLE[self.role]
 
 class LocationCriteria(db.Model):
     __tablename__ = 'locationcriteria'

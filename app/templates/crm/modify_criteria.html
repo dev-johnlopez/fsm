@@ -1,14 +1,10 @@
-{% if contact is defined %}
-  {% set active_page = "edit" %}
-{% else %}
-  {% set active_page = "create" %}
-{% endif %}
+{% set active_page = "criteria" %}
 
 {% extends 'crm/layouts/template.html' %}
 {% block content %}
 <form class="form-horizontal" method="post">
   {{ form.hidden_tag() }}
-  {% include 'crm/forms/contact.html' %}
+  {% include 'crm/forms/criteria.html' %}
   <div class="row-fluid mt-3 pull-right">
     <button type="submit" class="btn btn-primary">Submit</button>
   </div>

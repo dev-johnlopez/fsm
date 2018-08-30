@@ -27,8 +27,20 @@
         </div>
         <hr />
         <div class="row">
-          <p>Flip: {{ criteria.flip }}</p>
-          <p>Buy &amp; Hold: {{ criteria.rental }}
+          <div class="col-sm-4">
+            <h6>Investment Strategies</h6>
+            {% if criteria.flip %}
+              <p><b>Flip: {{ criteria.flip }}</b></p>
+            {% endif %}
+            {% if criteria.rental %}
+              <p>Buy &amp; Hold</p>
+            {% endif %}
+          </div>
+          <div class="col-sm-8">
+            <h6>Investing Locations</h6>
+            <p>{{ criteria.getLocations() }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>

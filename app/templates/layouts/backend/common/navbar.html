@@ -24,19 +24,7 @@
 
                       <ul class="list-inline float-right mb-0">
 
-                          <li class="list-inline-item notification-list hide-phone">
-                              <a class="nav-link waves-light waves-effect" href="#" id="btn-fullscreen">
-                                  <i class="mdi mdi-crop-free noti-icon"></i>
-                              </a>
-                          </li>
-
-                          <li class="list-inline-item notification-list">
-                              <a class="nav-link right-bar-toggle waves-light waves-effect" href="#">
-                                  <i class="mdi mdi-dots-horizontal noti-icon"></i>
-                              </a>
-                          </li>
-
-                          <li class="list-inline-item dropdown notification-list">
+                        {#  <li class="list-inline-item dropdown notification-list">
                               <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown" href="#" role="button"
                                  aria-haspopup="false" aria-expanded="false">
                                   <i class="mdi mdi-bell noti-icon"></i>
@@ -72,9 +60,15 @@
                                   </a>
 
                               </div>
+                          </li>#}
+
+                          <li class="list-inline-item">
+                              <a class="nav-link waves-light waves-effect" href="{{ url_for_security('logout') }}">
+                                  Logout
+                              </a>
                           </li>
 
-                          <li class="list-inline-item dropdown notification-list">
+                        {#  <li class="list-inline-item dropdown notification-list">
                               <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#" role="button"
                                  aria-haspopup="false" aria-expanded="false">
                                   <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
@@ -106,7 +100,7 @@
                                   </a>
 
                               </div>
-                          </li>
+                          </li>#}
 
                       </ul>
                       {% if g.search_form %}

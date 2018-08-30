@@ -11,3 +11,5 @@ class Config(object):
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
+    SECURITY_REGISTERABLE = True
+    SECURITY_PASSWORD_SALT = '915DNFsNPMctAT07W2L5'

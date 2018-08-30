@@ -2,6 +2,7 @@ from flask import g, render_template, flash, redirect, url_for, request
 from app import db
 from app.main import bp
 from app.main.forms import SearchForm
+from flask_security import login_required
 #from app.crm.models import Contact
 
 @bp.before_app_request
@@ -9,6 +10,7 @@ def before_request():
     g.search_form = SearchForm()
 
 @bp.route('/')
+@login_required
 def index():
     return render_template('main/index.html', title='Dashboard')
 

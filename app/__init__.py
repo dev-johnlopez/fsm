@@ -1,8 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_security import Security
+from flask_security import Security, SQLAlchemyUserDatastore
 from flask_admin import Admin
+from flask_mail import Mail
 from config import Config
 from sqlalchemy import event
 from elasticsearch import Elasticsearch
@@ -12,14 +13,21 @@ db = SQLAlchemy()
 migrate = Migrate()
 security = Security()
 admin = Admin()
+mail = Mail()
 
 def create_app(config_class=Config):
         app = Flask(__name__)
         app.config.from_object(config_class)
         db.init_app(app)
         migrate.init_app(app, db)
-        security.init_app(app)
+        mail.init_app(app)
+
         app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) if app.config['ELASTICSEARCH_URL'] else None
+
+        from app.auth.models import Role, User
+
+        user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+        security.init_app(app=app, datastore=user_datastore)
 
         from app.main import bp as main_bp
         app.register_blueprint(main_bp)
@@ -41,6 +49,6 @@ def create_app(config_class=Config):
 
         return app
 
-from app.deals.models import *
+from app.deals.models import Deal
 event.listen(Deal, 'init', Deal.init_state_machine)
 event.listen(Deal, 'load', Deal.init_state_machine)

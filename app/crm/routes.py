@@ -1,15 +1,18 @@
 from flask import g, render_template, flash, redirect, url_for, request
 from app import db
 from app.crm import bp
-from app.crm.forms import ContactForm, InvestmentCriteriaForm, SearchForm
-from app.crm.models import Contact, InvestmentCriteria
+from app.crm.forms import ContactForm, InvestmentCriteriaForm, SearchForm, InvestmentLocationForm
+from app.crm.models import Contact, InvestmentCriteria, LocationCriteria
 from app.src.util import flashFormErrors
+from flask_security import login_required
 
 @bp.route('/')
+@login_required
 def index():
     return render_template('crm/index.html', title='Dashboard')
 
 @bp.route('/search', methods=['GET','POST'])
+@login_required
 def search():
     form = SearchForm()
     results = []
@@ -28,6 +31,7 @@ def search():
     return render_template('crm/search.html', title='Search', form=form, results=results)
 
 @bp.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
     form = ContactForm()
     if form.validate_on_submit():
@@ -47,29 +51,37 @@ def create():
     return render_template('crm/create.html', title='Dashboard', form=form)
 
 @bp.route('/edit/<contact_id>', methods=['GET','POST'])
+@login_required
 def edit(contact_id):
     return render_template('crm/index.html', title='Search', form=form, results=results)
 
 @bp.route('/view/<contact_id>', methods=['GET', 'POST'])
+@login_required
 def view(contact_id):
     contact = Contact.query.get(contact_id)
     return render_template('crm/view.html', title='View Contact', contact=contact)
 
 @bp.route('/<contact_id>/delete')
+@login_required
 def delete(contact_id):
     return render_template('crm/index.html', title='View')
 
 @bp.route('/<contact_id>/criteria')
+@login_required
 def criteria(contact_id):
     contact = Contact.query.get(contact_id)
     return render_template('crm/criteria.html', title='Criteria', contact=contact)
 
 @bp.route('/<contact_id>/criteria/create', methods=['GET','POST'])
+@login_required
 def add_criteria(contact_id):
     form = InvestmentCriteriaForm()
     if form.validate_on_submit():
         contact = Contact.query.get(contact_id)
         criteria = InvestmentCriteria()
+        #for location in criteria.locations:
+        #    investment_location = LocationCriteria()
+        #    criteria.locations.append(investment_location)
         form.populate_obj(obj=criteria)
         contact.investment_criteria.append(criteria)
         db.session.add(contact)
@@ -80,6 +92,7 @@ def add_criteria(contact_id):
     return render_template('crm/modify_criteria.html', title='Criteria', form=form)
 
 @bp.route('/criteria/<criteria_id>/edit', methods=['GET','POST'])
+@login_required
 def edit_criteria(criteria_id):
     form = InvestmentCriteriaForm()
     return render_template('crm/modify_criteria.html', title='Criteria', form=form)

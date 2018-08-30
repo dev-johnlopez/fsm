@@ -1,10 +1,11 @@
 from app import db
+from app.common import BaseModel
 from app.mixins import StateMixin
+from app import constants as CONSTANTS
 #from app.src.util.string_util import StringUtil
 
-class Deal(StateMixin, db.Model):
+class Deal(StateMixin, BaseModel):
     __tablename__ = 'deal'
-    id = db.Column(db.Integer, primary_key=True)
     list_price = db.Column(db.Integer)
     rehab_amount = db.Column(db.Integer)
     after_repair_value = db.Column(db.Integer)
@@ -36,6 +37,9 @@ class Deal(StateMixin, db.Model):
         dealContact = DealContact(contact=contact, roles=[role])
         self.contacts.append(dealContact)
 
+    def getApplicableBuyers(self):
+        pass
+
 
 #class DealContact(db.Model):
 #    __tablename__ = 'dealcontact'
@@ -52,9 +56,8 @@ class Deal(StateMixin, db.Model):
 #    name = db.Column(db.String(255), nullable=False)
 
 
-class Property(db.Model):
+class Property(BaseModel):
     __tablename__ = 'property'
-    id = db.Column(db.Integer, primary_key=True)
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     property_type = db.Column(db.String(50))
     address = db.relationship('Address', uselist=False)
@@ -73,6 +76,9 @@ class Property(db.Model):
 
     def __repr__(self):
         return str(self.address)
+
+    def getPropertyType(self):
+          return CONSTANTS.PROPERTY_TYPE[self.property_type]
 
 class ResidentialProperty(Property):
 
@@ -145,8 +151,7 @@ class RetailProperty(CommercialProperty):
 #    mailing = 1
 #    physical = 2
 
-class Address(db.Model):
-    __tablename__ = 'address'
+class Address(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
     line_1 = db.Column(db.String(255))
     line_2 = db.Column(db.String(255))

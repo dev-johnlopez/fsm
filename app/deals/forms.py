@@ -2,12 +2,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField, FormField, BooleanField, TextAreaField, SelectField
 from wtforms.validators import DataRequired
 from app.fieldtypes import StateSelectField
+from app.deals import constants as CONSTANTS
 
 class AddressForm(FlaskForm):
     line_1 = StringField('Street Address', validators=[])
     line_2 = StringField('Street Address', validators=[])
     city = StringField('City', validators=[])
     state_province = SelectField('State', choices=[
+        ('',''),
         ('AK','Alaska'),
         ('AL','Alabama'),
         ('AR','Arkansas'),
@@ -66,6 +68,7 @@ class SearchForm(FlaskForm):
     line_1 = StringField('Street Address', validators=[])
     city = StringField('City', validators=[])
     state_province = SelectField('State', choices=[
+        ('',''),
         ('AK','Alaska'),
         ('AL','Alabama'),
         ('AR','Arkansas'),
@@ -126,11 +129,11 @@ class PropertyForm(FlaskForm):
     owner_occupied = BooleanField()
     property_type = SelectField('Property Type', choices=[
                                         ('', ''),
-                                        ('0', 'Single Family'),
-                                        ('1', 'Residential Multi Family'),
-                                        ('2', 'Commercial Multi Fmaily'),
-                                        ('3', 'Self Storage'),
-                                        ('4', 'Retail')],
+                                        (str(CONSTANTS.SFR), 'Single Family'),
+                                        (str(CONSTANTS.RESIDENTIAL_MULTI_FAMILY), 'Residential Multi Family'),
+                                        (str(CONSTANTS.COMMERCIAL_MULTI_FAMILY), 'Commercial Multi Fmaily'),
+                                        (str(CONSTANTS.SELF_STORAGE), 'Self Storage'),
+                                        (str(CONSTANTS.RETAIL), 'Retail')],
                             validators=[DataRequired()])
     bedrooms = IntegerField('Bedrooms', validators=[])
     bathrooms = IntegerField('Bathrooms', validators=[])

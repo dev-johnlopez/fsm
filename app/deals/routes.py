@@ -1,8 +1,8 @@
 from flask import g, render_template, flash, redirect, url_for, request
 from app import db
-from app.deals import bp
-from app.deals.forms import SearchForm, DealForm, PropertyForm, MarketDealForm
-from app.deals.models import Deal, Property, Address
+from . import bp
+from .forms import SearchForm, DealForm, PropertyForm, MarketDealForm
+from .models import Deal, Property, Address
 from app.crm.models import Contact
 from app.src.util import flashFormErrors
 from sqlalchemy.orm import join
@@ -95,3 +95,9 @@ def search():
         flashFormErrors(form)
 
     return render_template('deals/search.html', title='Search', results=results, form=form)
+
+@bp.route('<deal_id>/interested', methods=['GET','POST'])
+@login_required
+def interested(deal_id):
+    deal = Deal.query.get(deal_id)
+    return render_template('deals/interested.html', title='Interested Parties', deal=deal)

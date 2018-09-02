@@ -61,6 +61,12 @@ def view(contact_id):
     contact = Contact.query.get(contact_id)
     return render_template('crm/view.html', title='View Contact', contact=contact)
 
+@bp.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    contact = Contact.query.get(1)
+    return render_template('crm/view.html', title='View Contact', contact=contact)
+
 @bp.route('/<contact_id>/delete')
 @login_required
 def delete(contact_id):
@@ -79,9 +85,6 @@ def add_criteria(contact_id):
     if form.validate_on_submit():
         contact = Contact.query.get(contact_id)
         criteria = InvestmentCriteria()
-        #for location in criteria.locations:
-        #    investment_location = LocationCriteria()
-        #    criteria.locations.append(investment_location)
         form.populate_obj(obj=criteria)
         contact.investment_criteria.append(criteria)
         db.session.add(contact)

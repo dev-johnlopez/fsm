@@ -30,11 +30,9 @@
           <div class="col-sm-4">
             <h6>Investment Strategies</h6>
             {% if criteria.flip %}
-              <p><b>Flip: {{ criteria.flip }}</b></p>
+              <p>Flip: {% if criteria.flip %}Yes{% else %}No{% endif %}</p>
             {% endif %}
-            {% if criteria.rental %}
-              <p>Buy &amp; Hold</p>
-            {% endif %}
+              <p>Buy &amp; Hold: {% if criteria.rental %}Yes{% else %}No{% endif %}</p>
           </div>
           <div class="col-sm-8">
             <h6>Investing Locations</h6>

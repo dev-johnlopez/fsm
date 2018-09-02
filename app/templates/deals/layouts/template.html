@@ -36,6 +36,22 @@
         {% if summernote %}
           <script src="{{ url_for('static', filename='backend/plugins/summernote/summernote.min.js') }}"></script>
         {% endif %}
+        
+        {% if data_table %}
+          <!-- Required datatable js -->
+          <script src="{{ url_for('static', filename='backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
+          <script src="{{ url_for('static', filename='backend/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
+          <script src="{{ url_for('static', filename='backend/plugins/datatables/dataTables.responsive.min.js') }}"></script>
+          <script src="{{ url_for('static', filename='backend/plugins/datatables/responsive.bootstrap4.min.js') }}"></script>
+
+
+          <script type="text/javascript">
+              $(document).ready(function() {
+                  $('.datatable').DataTable();
+              } );
+
+          </script>
+        {% endif %}
         <!-- App js -->
         <script src="{{ url_for('static', filename='backend/js/jquery.core.js') }}"></script>
         <script src="{{ url_for('static', filename='backend/js/jquery.app.js') }}"></script>
@@ -53,6 +69,8 @@
             });
         </script>
         {% endif %}
+
+
 
 
     </body>

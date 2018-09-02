@@ -1,7 +1,11 @@
 from app import db
+from app import constants as CONSTANTS
+import app.crm.models as crm_models
 from app.common import BaseModel
 from app.mixins import StateMixin
-from app import constants as CONSTANTS
+#from app.deals import constants as CONSTANTS
+#from app.deals import constants as CONSTANTS
+
 #from app.src.util.string_util import StringUtil
 
 class Deal(StateMixin, BaseModel):
@@ -40,26 +44,16 @@ class Deal(StateMixin, BaseModel):
     def getApplicableBuyers(self):
         pass
 
-
-#class DealContact(db.Model):
-#    __tablename__ = 'dealcontact'
-#    id = db.Column(db.Integer, primary_key=True)
-#    deal_id = db.Column(db.Integer, db.ForeignKey('deal.id'))
-#    address_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
-#    contact = db.relationship('Contact', uselist=False)
-#    roles = db.relationship('DealContactRole', backref='contact', lazy=True)
-
-#class DealContactRole(db.Model):
-#    __tablename__ = 'dealcontactrole'
-#    id = db.Column(db.Integer, primary_key=True)
-#    deal_contact_id = db.Column(db.Integer, db.ForeignKey('dealcontact.id'))
-#    name = db.Column(db.String(255), nullable=False)
-
+    def getInterestedContacts(self):
+        query = crm_models.Contact.query.join(crm_models.InvestmentCriteria).join(crm_models.LocationCriteria)
+        deal_zip_code = self.property.address.postal_code
+        query = query.filter(crm_models.LocationCriteria.location_code.like('%' + deal_zip_code + '%'))
+        return query.all()
 
 class Property(BaseModel):
     __tablename__ = 'property'
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
-    property_type = db.Column(db.String(50))
+    property_type = db.Column(db.Integer)
     address = db.relationship('Address', uselist=False)
     sq_feet = db.Column(db.Integer)
     bedrooms = db.Column(db.Integer)
@@ -70,7 +64,7 @@ class Property(BaseModel):
     owner_occupied = db.Column(db.Boolean)
 
     __mapper_args__ = {
-        'polymorphic_identity':'unknown',
+        'polymorphic_identity':CONSTANTS.OTHER,
         'polymorphic_on':property_type
     }
 
@@ -83,7 +77,7 @@ class Property(BaseModel):
 class ResidentialProperty(Property):
 
     __mapper_args__ = {
-        'polymorphic_identity':'residential'
+        'polymorphic_identity':CONSTANTS.RESIDENTIAL
     }
 
     def __init__(self, **kwargs):
@@ -93,7 +87,7 @@ class ResidentialProperty(Property):
 class SingleFamilyProperty(ResidentialProperty):
 
     __mapper_args__ = {
-        'polymorphic_identity':'sfr'
+        'polymorphic_identity':CONSTANTS.SFR
     }
 
     def __init__(self, **kwargs):
@@ -103,7 +97,7 @@ class ResidentialMultiFamilyProperty(ResidentialProperty):
     units = db.Column(db.Integer)
 
     __mapper_args__ = {
-        'polymorphic_identity':'residential_multi_family'
+        'polymorphic_identity':CONSTANTS.RESIDENTIAL_MULTI_FAMILY
     }
 
     def __init__(self, **kwargs):
@@ -112,7 +106,7 @@ class ResidentialMultiFamilyProperty(ResidentialProperty):
 class CommercialProperty(Property):
 
     __mapper_args__ = {
-        'polymorphic_identity':'commercial'
+        'polymorphic_identity':CONSTANTS.COMMERCIAL
     }
 
     def __init__(self, **kwargs):
@@ -121,7 +115,7 @@ class CommercialProperty(Property):
 class CommercialMultiFamilyProperty(CommercialProperty):
 
     __mapper_args__ = {
-        'polymorphic_identity':'commercial_multi_family'
+        'polymorphic_identity':CONSTANTS.COMMERCIAL_MULTI_FAMILY
     }
 
     def __init__(self, **kwargs):
@@ -130,26 +124,20 @@ class CommercialMultiFamilyProperty(CommercialProperty):
 class SelfStorageProperty(CommercialProperty):
 
     __mapper_args__ = {
-        'polymorphic_identity':'self_storage'
+        'polymorphic_identity':CONSTANTS.SELF_STORAGE
     }
 
     def __init__(self, **kwargs):
-        super(SingleFamilyProperty, self).__init__(**kwargs)
+        super(SelfStorageProperty, self).__init__(**kwargs)
 
 class RetailProperty(CommercialProperty):
 
     __mapper_args__ = {
-        'polymorphic_identity':'retail'
+        'polymorphic_identity':CONSTANTS.RETAIL
     }
 
     def __init__(self, **kwargs):
-        super(SingleFamilyProperty, self).__init__(**kwargs)
-
-
-#import enum
-#class AddressTypeEnum(enum.Enum):
-#    mailing = 1
-#    physical = 2
+        super(RetailProperty, self).__init__(**kwargs)
 
 class Address(BaseModel):
     id = db.Column(db.Integer, primary_key=True)
@@ -166,4 +154,20 @@ class Address(BaseModel):
     def __repr__(self):
         return self.line_1
         #return StringUtil.joinStringsWithBuffer(", ", [self.ine_1, self.city, self.state_province])
-#
+
+
+
+
+#class DealContact(db.Model):
+#    __tablename__ = 'dealcontact'
+#    id = db.Column(db.Integer, primary_key=True)
+#    deal_id = db.Column(db.Integer, db.ForeignKey('deal.id'))
+#    address_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+#    contact = db.relationship('Contact', uselist=False)
+#    roles = db.relationship('DealContactRole', backref='contact', lazy=True)
+
+#class DealContactRole(db.Model):
+#    __tablename__ = 'dealcontactrole'
+#    id = db.Column(db.Integer, primary_key=True)
+#    deal_contact_id = db.Column(db.Integer, db.ForeignKey('dealcontact.id'))
+#    name = db.Column(db.String(255), nullable=False)

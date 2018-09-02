@@ -2,7 +2,6 @@ from app import db
 from app.common import BaseModel
 from app.mixins import SearchableMixin
 from app.src.util.string_util import StringUtil
-from app.deals.models import Address
 from app import constants as CONSTANTS
 
 class Contact(SearchableMixin, BaseModel):
@@ -16,6 +15,8 @@ class Contact(SearchableMixin, BaseModel):
     referral_source = db.Column(db.String(255))
     investment_strategy = db.Column(db.String(255))
     investment_criteria = db.relationship("InvestmentCriteria")
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship("User", back_populates="contact", foreign_keys=[user_id])
 
 
     __mapper_args__ = {

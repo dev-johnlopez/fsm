@@ -18,7 +18,7 @@ migrate = Migrate()
 security = Security()
 admin = Admin()
 mail = Mail()
-geolocator = Nominatim()
+geolocator = Nominatim(user_agent='Assignably')
 #excel = Excel()
 
 def create_app(config_class=Config):

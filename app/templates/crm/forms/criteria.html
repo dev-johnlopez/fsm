@@ -32,6 +32,18 @@
             {% endfor %}
           </div>
         </div>
+        <div class="form-group row">
+          <label for="{{ form.property_type.id }}" class="col-3 col-form-label">{{ form.minimum_units.label }}</label>
+          <div class="col-9">
+              {{ form.minimum_units(type="text", class="form-control") }}
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="{{ form.property_type.id }}" class="col-3 col-form-label">{{ form.maximum_units.label }}</label>
+          <div class="col-9">
+              {{ form.maximum_units(type="text", class="form-control") }}
+          </div>
+        </div>
       </div>
     </div>
   </div>

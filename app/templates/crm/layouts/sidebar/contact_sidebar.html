@@ -1,5 +1,5 @@
 <ul class="nav flex-column">
-  <li class="nav-item">
+  {#<li class="nav-item">
     {% if active_page == "summary" %}
       <a class="nav-link active" href="#">
         <span data-feather="home"></span>
@@ -24,7 +24,7 @@
         Edit <span class="sr-only">(current)</span>
       </a>
     {% endif %}
-  </li>
+  </li>#}
   <li class="nav-item">
     {% if active_page == "criteria" %}
       <a class="nav-link active" href="{{ url_for('crm.criteria', contact_id=contact.id) }}">

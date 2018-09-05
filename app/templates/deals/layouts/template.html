@@ -36,7 +36,7 @@
         {% if summernote %}
           <script src="{{ url_for('static', filename='backend/plugins/summernote/summernote.min.js') }}"></script>
         {% endif %}
-        
+
         {% if data_table %}
           <!-- Required datatable js -->
           <script src="{{ url_for('static', filename='backend/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -68,6 +68,36 @@
                 });
             });
         </script>
+        {% endif %}
+
+        {% if map %}
+
+        <script>
+          var map;
+          function initMap() {
+            var propertyLocation;
+
+            {% for deal in deals|sort(attribute='create_date', reverse=True) %}
+              {% if deal.property.address.latitude is not none and deal.property.address.longitude is not none %}
+                  propertyLocation = {lat: {{ deal.property.address.latitude}}, lng: {{ deal.property.address.longitude}}};
+              {% else %}
+                  propertyLocation = {lat: 0, lng: 0};
+              {% endif %}
+              var map{{loop.index}} = new google.maps.Map(document.getElementById('gmaps-markers-{{ loop.index }}'), {
+                center: propertyLocation,
+                zoom: 8
+              });
+              var marker{{loop.index}} = new google.maps.Marker({
+                position: propertyLocation,
+                map: map{{loop.index}},
+                title: '{{ deal.property.address }}'
+              });
+            {% endfor %}
+
+          }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW06EkRn-nhTFtmqjiPsQN_1GBsI9Lh2Q&callback=initMap"
+        async defer></script>
         {% endif %}
 
 

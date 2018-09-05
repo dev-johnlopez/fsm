@@ -1,34 +1,82 @@
 import pandas as pd
 import numpy as np
 from pandas import ExcelFile
+from flask import flash
+from flask_security import current_user
 from app.src.mappers.address_mapper import AddressMapper
 from app.src.mappers.contact_mapper import ContactMapper
 from app.src.mappers.deal_mapper import DealMapper
+from app.src.mappers.criteria_mapper import CriteriaMapper
+from app.src.util import flashFormErrors
 from app import db
 
-owner_and_properties_template = ['OWNER 1 LABEL NAME', 'OWNER 1 LAST NAME', 'OWNER 1 FIRST NAME',
-       'OWNER 1 MIDDLE NAME', 'OWNER 1 SUFFIX', 'OWNER 2 LABEL NAME',
-       'OWNER 2 LAST NAME', 'OWNER 2 FIRST NAME', 'OWNER 2 MIDDLE NAME',
-       'OWNER 2 SUFFIX', 'OWNER CARE OF NAME', 'MAIL ADDRESS', 'MAIL CITY',
-       'MAIL STATE', 'MAIL ZIP CODE', 'MAIL ZIP+4', 'MAIL ZIP/ZIP+4',
-       'MAIL CARRIER ROUTE', 'MAIL COUNTRY', 'PROPERTY ADDRESS',
-       'PROPERTY HOUSE NUMBER', 'PROPERTY HOUSE NUMBER PREFIX',
-       'PROPERTY HOUSE NUMBER SUFFIX', 'PROPERTY HOUSE NUMBER 2',
-       'PROPERTY PRE DIRECTION', 'PROPERTY STREET NAME',
-       'PROPERTY STREET NAME SUFFIX', 'PROPERTY POST DIRECTION',
-       'PROPERTY UNIT NUMBER', 'PROPERTY CITY', 'PROPERTY STATE',
-       'PROPERTY ZIP CODE', 'PROPERTY ZIP+4', 'PROPERTY ZIP/ZIP+4',
-       'PROPERTY CARRIER ROUTE', 'COUNTY', 'PROPERTY TYPE', 'EQUITY (%)',
-       'BLDG/LIVING AREA', 'BEDROOMS', 'LAST MARKET SALE DATE',
-       'OWNER OCCUPIED', 'PHONE NUMBER']
+investor_fuse_buyers_list = ['Created on',
+                             'Created by',
+                             'First Name',
+                             'Last Name',
+                             'Direct Number',
+                             'Email',
+                             'Batch',
+                             'Type',
+                             'VIP',
+                             'How did you hear about us?',
+                             'Investing Strategy',
+                             'Property Types',
+                             'State',
+                             'Notes',
+                             'Followup Sequencer',
+                             'Followup Sequences',
+                             'Communication Log',
+                             'Tags']
+
 
 class ExcelReader():
     @classmethod
     def readExcel(self, fileData):
         df = pd.read_excel(fileData, sheet_name=0)
         df1 = df.replace(np.nan, '', regex=True)
-        if np.array_equal(list(df),owner_and_properties_template):
-            self.mapOwnersAndProperties(df1)
+        if np.array_equal(list(df),investor_fuse_buyers_list):
+            self.importBuyersList(df1)
+        else:
+            flash('Invalid Template', 'error')
+            flash('{}'.format(list(df)), 'error')
+
+    @classmethod
+    def importBuyersList(self, df):
+        current_user_contacts = current_user.getUserContacts()
+        for contact in current_user_contacts:
+            contact.active = False
+        for index, dfRow in df.iterrows():
+            contact = None
+            if current_user.searchContactsByEmail(str(dfRow['Email'])):
+                contact = current_user.searchContactsByEmail(str(dfRow['Email']))
+            else:
+                contact = self.mapContact(dfRow)
+            if contact is not None:
+                contact.active = True
+                contact.investment_criteria = []
+                property_types = [x.strip() for x in str(dfRow['Property Types']).split(';')]
+                for property_type in property_types:
+                    investment_criteria = CriteriaMapper.buildInvestingCriteria(
+                        property_type,
+                        str(dfRow['Investing Strategy']),
+                        str(dfRow['State'])
+                    )
+                    contact.investment_criteria.append(investment_criteria)
+                print(property_types)
+                db.session.add(contact)
+        db.session.commit()
+
+    @classmethod
+    def mapContact(self, dfRow):
+        contact = ContactMapper().buildContactWithSubtype(
+            str(dfRow['First Name']),
+            str(dfRow['Last Name']),
+            str(dfRow['Direct Number']),
+            str(dfRow['Email']),
+            str(dfRow['Type'])
+        )
+        return contact
 
     @classmethod
     def mapOwnersAndProperties(self, df):

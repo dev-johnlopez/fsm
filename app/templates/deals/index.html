@@ -1,5 +1,54 @@
 {% set active_page = "dashboard" %}
+{% set map = 1 %}
 {% extends 'deals/layouts/template.html' %}
 {% block content %}
-<h1>Test</h1>
+{% for deal in deals|sort(attribute='create_date', reverse=True) %}
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6">
+              <h5 class="card-title"><address>{{ deal.property.address }}</address></h5>
+            </div>
+            <div class="col-sm-6">
+              <div class="pull-right">
+                <a href="{{ url_for('deals.edit', deal_id=deal.id) }}" class="btn btn-primary">Edit</a>
+                <a href="{{ url_for('deals.delete', deal_id=deal.id) }}" class="btn btn-danger">Delete</a>
+                <a href="{{ url_for('deals.export_buyers', deal_id=deal.id) }}" class="btn btn-success">Export Buyers</a>
+              </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-lg-6">
+
+            <div id="gmaps-markers-{{ loop.index }}" class="gmaps"></div>
+
+          </div>
+
+          <div class="col-lg-6">
+            <h6>Property Details</h6>
+            <p>{{ deal.property.getPropertyType() }}</p>
+            {% if deal.property.property_type != 2 %}
+              <p>{{ deal.property.units }} unit(s)</p>
+            {% endif %}
+            <p>You have {{ deal.getInterestedContacts()|length }} buyer(s) who may be interested in this deal.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <h5 class="card-title">You do not have any active deals. <a href="{{ url_for('deals.create') }}">Add one here</a></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}

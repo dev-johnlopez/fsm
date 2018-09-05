@@ -12,7 +12,8 @@ def before_request():
 @bp.route('/')
 @login_required
 def index():
-    return render_template('main/index.html', title='Dashboard')
+    return redirect(url_for('deals.index'))
+    #return render_template('main/index.html', title='Dashboard')
 
 #@bp.route('/search')
 #def search():

@@ -1,5 +1,7 @@
 from app import db
 from flask_security import UserMixin, RoleMixin
+from app.deals.models import Deal
+from app.crm.models import Contact
 
 roles_users = db.Table('roles_users',
         db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
@@ -30,13 +32,35 @@ class User(db.Model, UserMixin):
     last_login_ip = db.Column(db.String(40))
     current_login_ip = db.Column(db.String(40))
     login_count = db.Column(db.Integer)
-    user_contact = db.relationship("Contact", uselist=False, back_populates="user")
+    user_contact_id = db.Column(db.Integer, db.ForeignKey('usercontact.id'))
+    user_contact = db.relationship('UserContact', uselist=False)
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
 
     def __init__(self, **kwargs):
+        self.user_contact = UserContact()
         super(User, self).__init__(**kwargs)
-        self.listings = []
 
     def __repr__(self):
         return '%s' % (self.email)
+
+    def getUserContacts(self):
+        return Contact.query.filter_by(create_user_id=self.id).filter_by(active=True).all()
+
+    def searchContactsByEmail(self, email):
+        return Contact.query.filter_by(create_user_id=self.id).filter_by(email=email).first()
+
+    def getDeals(self):
+        return Deal.query.filter_by(create_user_id=self.id).all()
+
+class UserContact(db.Model):
+
+    __tablename__ = 'usercontact'
+
+    id = db.Column(db.Integer, primary_key=True)
+    contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'))
+    contact = db.relationship('Contact', uselist=False)
+
+    def __init__(self, **kwargs):
+        self.contact = Contact()
+        super(UserContact, self).__init__(**kwargs)

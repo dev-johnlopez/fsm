@@ -7,6 +7,7 @@ from app import constants as CONSTANTS
 class Contact(SearchableMixin, BaseModel):
     __searchable__ = ['first_name', 'last_name']
     __tablename__ = 'contact'
+    active = db.Column(db.Boolean, default=True)
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     contact_type = db.Column(db.String(50))
@@ -15,8 +16,6 @@ class Contact(SearchableMixin, BaseModel):
     referral_source = db.Column(db.String(255))
     investment_strategy = db.Column(db.String(255))
     investment_criteria = db.relationship("InvestmentCriteria")
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship("User", back_populates="contact", foreign_keys=[user_id])
 
 
     __mapper_args__ = {
@@ -44,9 +43,6 @@ class Investor(Contact):
     __mapper_args__ = {
         'polymorphic_identity':'investor'
     }
-
-    def __init__(self, **kwargs):
-        super(Investor, self).__init__(**kwargs)
 
 class Builder(Contact):
 
@@ -111,6 +107,14 @@ class InvestmentCriteria(BaseModel):
 
     def getPropertyType(self):
           return CONSTANTS.PROPERTY_TYPE[self.property_type]
+
+    def getDetailedPropertyType(self):
+        if self.property_type == CONSTANTS.SFR:
+            return self.getPropertyType()
+        if self.maximum_units == -1:
+            return '{} ({}+ Units)'.format(self.getPropertyType(), self.minimum_units)
+        else:
+            return '{} ({}-{} Units)'.format(self.getPropertyType(), self.minimum_units, self.maximum_units)
 
     def getLocations(self):
         return ', '.join(location.location_code for location in self.locations)

@@ -4,11 +4,13 @@ from flask_migrate import Migrate
 from flask_security import Security, SQLAlchemyUserDatastore
 from flask_admin import Admin
 from flask_mail import Mail
+import flask_excel as excel
 from config import Config
 from sqlalchemy import event
 from elasticsearch import Elasticsearch
 import logging
 from logging.handlers import SMTPHandler
+from geopy.geocoders import Nominatim
 
 app = Flask(__name__)
 db = SQLAlchemy()
@@ -16,6 +18,8 @@ migrate = Migrate()
 security = Security()
 admin = Admin()
 mail = Mail()
+geolocator = Nominatim()
+#excel = Excel()
 
 def create_app(config_class=Config):
         app = Flask(__name__)
@@ -23,6 +27,7 @@ def create_app(config_class=Config):
         db.init_app(app)
         migrate.init_app(app, db)
         mail.init_app(app)
+        excel.init_excel(app)
 
         app.elasticsearch = Elasticsearch([app.config['ELASTICSEARCH_URL']]) if app.config['ELASTICSEARCH_URL'] else None
 
@@ -67,6 +72,6 @@ def create_app(config_class=Config):
 
         return app
 
-#from app.deals.models import Deal
-#event.listen(Deal, 'init', Deal.init_state_machine)
+#from app.deals.models import Address
+#event.listen(Address, 'before_flush', Address.geocode)
 #event.listen(Deal, 'load', Deal.init_state_machine)

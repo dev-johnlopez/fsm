@@ -131,9 +131,9 @@
                     <div id="navigation">
                         <!-- Navigation Menu-->
                         <ul class="navigation-menu">
-                            <li class="has-submenu">
+                          {#  <li class="has-submenu">
                                 <a href="{{ url_for('main.index') }}"><i class="mdi mdi-desktop-mac"></i>Desktop</a>
-                            </li>
+                            </li>#}
 
                             <li class="has-submenu">
                                 <a href="{{ url_for('deals.index') }}"><i class="mdi mdi-home"></i>Deals</a>
@@ -146,10 +146,11 @@
                             <li class="has-submenu">
                                 <a href="{{ url_for('upload.index') }}"><i class="mdi mdi-account-multiple"></i>Import</a>
                             </li>
-
+                            {% if current_user.email == "john@johnlopez.org" %}
                             <li class="has-submenu">
                                 <a href="{{ url_for('admin.index') }}"><i class="mdi mdi-database"></i>Admin</a>
                             </li>
+                            {% endif %}
 
                         </ul>
                         <!-- End navigation menu -->

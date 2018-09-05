@@ -3290,6 +3290,11 @@ div#datatable-buttons_info {
 /* ===========
   Maps
  =============*/
+ .gmaps-sm, .gmaps-panaroma-sm {
+   height: 100px;
+   background: #eeeeee;
+   border-radius: 3px; }
+   
 .gmaps, .gmaps-panaroma {
   height: 300px;
   background: #eeeeee;

@@ -1,8 +1,10 @@
-from app import db
+from app import db, geolocator
 from app import constants as CONSTANTS
 import app.crm.models as crm_models
 from app.common import BaseModel
 from app.mixins import StateMixin
+from flask_security import current_user
+#from app.src.util.geopy import geolocator
 #from app.deals import constants as CONSTANTS
 #from app.deals import constants as CONSTANTS
 
@@ -41,13 +43,15 @@ class Deal(StateMixin, BaseModel):
         dealContact = DealContact(contact=contact, roles=[role])
         self.contacts.append(dealContact)
 
-    def getApplicableBuyers(self):
-        pass
-
     def getInterestedContacts(self):
-        query = crm_models.Contact.query.join(crm_models.InvestmentCriteria).join(crm_models.LocationCriteria)
+        query = crm_models.Contact.query.filter_by(active=True).filter_by(create_user_id=current_user.id).join(crm_models.InvestmentCriteria).join(crm_models.LocationCriteria)
         deal_zip_code = self.property.address.postal_code
-        query = query.filter(crm_models.LocationCriteria.location_code.like('%' + deal_zip_code + '%'))
+        deal_state_code = self.property.address.state_province
+        query = query.filter(crm_models.LocationCriteria.location_code.like('%' + deal_zip_code + '%') | crm_models.LocationCriteria.location_code.like('%' + deal_state_code + '%'))
+        if self.property.property_type != 2:
+            number_units = self.property.units
+            query = query.filter(crm_models.InvestmentCriteria.minimum_units <= number_units)
+            query = query.filter(crm_models.InvestmentCriteria.maximum_units >= number_units)
         return query.all()
 
 class Property(BaseModel):
@@ -55,6 +59,7 @@ class Property(BaseModel):
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     property_type = db.Column(db.Integer)
     address = db.relationship('Address', uselist=False)
+    units = db.Column(db.Integer, default=1)
     sq_feet = db.Column(db.Integer)
     bedrooms = db.Column(db.Integer)
     bathrooms = db.Column(db.Integer)
@@ -94,7 +99,6 @@ class SingleFamilyProperty(ResidentialProperty):
         super(SingleFamilyProperty, self).__init__(**kwargs)
 
 class ResidentialMultiFamilyProperty(ResidentialProperty):
-    units = db.Column(db.Integer)
 
     __mapper_args__ = {
         'polymorphic_identity':CONSTANTS.RESIDENTIAL_MULTI_FAMILY
@@ -150,13 +154,27 @@ class Address(BaseModel):
     postal_code = db.Column(db.String(20))
     county = db.Column(db.String(255))
     country = db.Column(db.String(255))
+    latitude = db.Column(db.Numeric(precision=9,scale=6))
+    longitude = db.Column(db.Numeric(precision=9,scale=6))
+
+    def __init__(self, **kwargs):
+        super(Address, self).__init__(**kwargs)
+
 
     def __repr__(self):
-        return self.line_1
-        #return StringUtil.joinStringsWithBuffer(", ", [self.ine_1, self.city, self.state_province])
+        return '{}, {}, {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code)
 
-
-
+    def geocode(self):
+        print(geolocator.geocode("175 5th Avenue NYC"))
+        print('{} {} {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code))
+        location = geolocator.geocode('{} {} {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code))
+        print(location)
+        if location is not None:
+            self.latitude = location.latitude
+            self.longitude = location.longitude
+        else:
+            self.latitude = None
+            self.longitude = None
 
 #class DealContact(db.Model):
 #    __tablename__ = 'dealcontact'

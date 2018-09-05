@@ -1,5 +1,6 @@
 from flask import g, render_template, flash, redirect, url_for, request
 from app import db
+from flask_security import current_user
 from app.crm import bp
 from app.crm.forms import ContactForm, InvestmentCriteriaForm, SearchForm, InvestmentLocationForm
 from app.crm.models import Contact, InvestmentCriteria, LocationCriteria
@@ -17,7 +18,7 @@ def search():
     form = SearchForm()
     results = []
     if form.validate_on_submit():
-        query = Contact.query
+        query = Contact.query.filter_by(create_user_id=current_user.id)
         if form.first_name.data:
             query = query.filter(Contact.first_name.like('%' + form.first_name.data + '%'))
         if form.last_name.data:
@@ -59,12 +60,12 @@ def edit(contact_id):
 @login_required
 def view(contact_id):
     contact = Contact.query.get(contact_id)
-    return render_template('crm/view.html', title='View Contact', contact=contact)
+    return render_template('crm/criteria.html', title='Criteria', contact=contact)
 
 @bp.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    contact = Contact.query.get(1)
+    contact = Contact.query.get(current_user.id)
     return render_template('crm/view.html', title='View Contact', contact=contact)
 
 @bp.route('/<contact_id>/delete')

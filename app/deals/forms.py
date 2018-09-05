@@ -3,6 +3,7 @@ from wtforms import StringField, IntegerField, FormField, BooleanField, TextArea
 from wtforms.validators import DataRequired
 from app.fieldtypes import StateSelectField
 from app.deals import constants as CONSTANTS
+from app.deals.models import Deal, Property, Address
 
 class AddressForm(FlaskForm):
     line_1 = StringField('Street Address', validators=[])
@@ -125,8 +126,9 @@ class SearchForm(FlaskForm):
     name = StringField('Name', validators=[])
 
 class PropertyForm(FlaskForm):
-    address = FormField(AddressForm)
+    address = FormField(AddressForm, default=lambda: Address())
     owner_occupied = BooleanField()
+    units = IntegerField('# Units', validators=[DataRequired()])
     property_type = SelectField('Property Type', choices=[
                                         ('', ''),
                                         (str(CONSTANTS.SFR), 'Single Family'),
@@ -140,7 +142,7 @@ class PropertyForm(FlaskForm):
     sq_feet = IntegerField('Sq. Feet', validators=[])
 
 class DealForm(FlaskForm):
-    property = FormField(PropertyForm)
+    property = FormField(PropertyForm, default=lambda: Property())
     list_price = IntegerField('List Price', validators=[])
     rehab_amount = IntegerField('Rehab Est.', validators=[])
     after_repair_value = IntegerField('ARV', validators=[])

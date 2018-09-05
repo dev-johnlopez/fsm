@@ -33,32 +33,39 @@
         <script src="{{ url_for('static', filename='backend/js/jquery.slimscroll.js') }}"></script>
         <script src="{{ url_for('static', filename='backend/js/jquery.scrollTo.min.js') }}"></script>
 
+        {% if chart %}
+        <!-- Chart JS -->
+        <script src="{{ url_for('static', filename='backend/plugins/chart.js/chart.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='backend/pages/jquery.chartjs.init.js') }}"></script>
+        {% endif %}
+
         <!-- App js -->
         <script src="{{ url_for('static', filename='backend/js/jquery.core.js') }}"></script>
         <script src="{{ url_for('static', filename='backend/js/jquery.app.js') }}"></script>
+        
+        {% if mustache %}
+          {% raw %}
+          <script id="location-row-template" type="x-tmpl-mustache">
+            <tr>
+                <th scope="row">{{ index }}</th>
+                <td><input type="hidden" id="locations-{{ id }}-location_type" name="locations-{{ id }}-location_type" required readonly type="text" value="1">Zip Code</td>
+                <td><input class="form-control" id="locations-{{ id }}-location_code" name="locations-{{ id }}-location_code" required type="text"></td>
+            </tr>
+          </script>
+          {% endraw %}
+          <script src="{{ url_for('static', filename='backend/js/mustache.min.js') }}"></script>
 
-        {% raw %}
-        <script id="location-row-template" type="x-tmpl-mustache">
-          <tr>
-              <th scope="row">{{ index }}</th>
-              <td><input type="hidden" id="locations-{{ id }}-location_type" name="locations-{{ id }}-location_type" required readonly type="text" value="1">Zip Code</td>
-              <td><input class="form-control" id="locations-{{ id }}-location_code" name="locations-{{ id }}-location_code" required type="text"></td>
-          </tr>
-        </script>
-        {% endraw %}
-        <script src="{{ url_for('static', filename='backend/js/mustache.min.js') }}"></script>
-
-        <script>
-          $( "#add-location" ).click(function(e) {
-            e.preventDefault();
-            var template = $('#location-row-template').html();
-            Mustache.parse(template);   // optional, speeds up future uses
-            var id = $('#location-table').find('tr').length;
-            var rendered = Mustache.render(template, {index: id+1, id: id});
-            $('#location-table').append(rendered);
-          });
-        </script>
-
+          <script>
+            $( "#add-location" ).click(function(e) {
+              e.preventDefault();
+              var template = $('#location-row-template').html();
+              Mustache.parse(template);   // optional, speeds up future uses
+              var id = $('#location-table').find('tr').length;
+              var rendered = Mustache.render(template, {index: id+1, id: id});
+              $('#location-table').append(rendered);
+            });
+          </script>
+        {% endif %}
 
     </body>
 </html>

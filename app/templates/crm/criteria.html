@@ -1,4 +1,4 @@
-{% set active_page = "summary" %}
+{% set active_page = "criteria" %}
 
 {% extends 'crm/layouts/template.html' %}
 {% block content %}
@@ -16,7 +16,7 @@
       <div class="card-body">
         <div class="row">
             <div class="col-sm-6">
-              <h5 class="card-title">{{ criteria.getPropertyType() }}</h5>
+              <h5 class="card-title">{{ criteria.getDetailedPropertyType() }}</h5>
             </div>
             <div class="col-sm-6">
               <div class="pull-right">
@@ -29,9 +29,7 @@
         <div class="row">
           <div class="col-sm-4">
             <h6>Investment Strategies</h6>
-            {% if criteria.flip %}
               <p>Flip: {% if criteria.flip %}Yes{% else %}No{% endif %}</p>
-            {% endif %}
               <p>Buy &amp; Hold: {% if criteria.rental %}Yes{% else %}No{% endif %}</p>
           </div>
           <div class="col-sm-8">
@@ -42,5 +40,17 @@
       </div>
     </div>
   </div>
-{% endfor %}
+  {% else %}
+  <div class="row-fluid mt-3">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <h5 class="card-title">This user does not have any investing criteria. <a href="{{ url_for('crm.add_criteria', contact_id=contact.id) }}">Add criteria here</a></h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}

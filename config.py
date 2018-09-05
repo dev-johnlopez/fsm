@@ -9,6 +9,7 @@ class Config(object):
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
     ELASTICSEARCH_URL = os.environ.get('ELASTICSEARCH_URL')
     SECURITY_REGISTERABLE = True
     SECURITY_PASSWORD_SALT = '915DNFsNPMctAT07W2L5'
@@ -21,4 +22,3 @@ class Config(object):
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.environ.get('MAIL_DEFAULT_SENDER')
     ADMINS = ['john@johnlopez.com']
-    LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')

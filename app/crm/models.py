@@ -7,7 +7,7 @@ from app import constants as CONSTANTS
 class Contact(db.Model):
     __tablename__ = 'contact'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     active = db.Column(db.Boolean, default=True)
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))

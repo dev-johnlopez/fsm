@@ -1,4 +1,3 @@
 .git
 flask
 *.env
-app.db

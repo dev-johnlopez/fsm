@@ -15,7 +15,7 @@ class Contact(SearchableMixin, BaseModel):
     email = db.Column(db.String(255))
     referral_source = db.Column(db.String(255))
     investment_strategy = db.Column(db.String(255))
-    investment_criteria = db.relationship("InvestmentCriteria")
+    investment_criteria = db.relationship('InvestmentCriteria')
 
 
     __mapper_args__ = {
@@ -103,7 +103,7 @@ class InvestmentCriteria(BaseModel):
     rental = db.Column(db.Integer)
     minimum_units = db.Column(db.Integer)
     maximum_units = db.Column(db.Integer)
-    locations = db.relationship("LocationCriteria")
+    locations = db.relationship('LocationCriteria')
 
     def getPropertyType(self):
           return CONSTANTS.PROPERTY_TYPE[self.property_type]

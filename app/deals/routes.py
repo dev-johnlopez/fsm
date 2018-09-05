@@ -26,7 +26,8 @@ def create():
         deal.property.address = Address()
         form.populate_obj(deal)
         deal.property.address.geocode()
-        db.session.add(deal)
+        current_user.deals.append(deal)
+        db.session.add(current_user)
         db.session.commit()
         return redirect(url_for('deals.index'))
     elif len(form.errors):

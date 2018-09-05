@@ -2,7 +2,7 @@ from app import db, geolocator
 from app import constants as CONSTANTS
 import app.crm.models as crm_models
 from app.common import BaseModel
-from app.mixins import StateMixin
+from app.mixins import StateMixin, AuditMixin
 from flask_security import current_user
 #from app.src.util.geopy import geolocator
 #from app.deals import constants as CONSTANTS
@@ -10,8 +10,11 @@ from flask_security import current_user
 
 #from app.src.util.string_util import StringUtil
 
-class Deal(StateMixin, BaseModel):
+class Deal(db.Model):
     __tablename__ = 'deal'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),
+        nullable=False)
     list_price = db.Column(db.Integer)
     rehab_amount = db.Column(db.Integer)
     after_repair_value = db.Column(db.Integer)
@@ -44,18 +47,11 @@ class Deal(StateMixin, BaseModel):
         self.contacts.append(dealContact)
 
     def getInterestedContacts(self):
-        query = crm_models.Contact.query.filter_by(active=True).filter_by(create_user_id=current_user.id).join(crm_models.InvestmentCriteria).join(crm_models.LocationCriteria)
-        deal_zip_code = self.property.address.postal_code
-        deal_state_code = self.property.address.state_province
-        query = query.filter(crm_models.LocationCriteria.location_code.like('%' + deal_zip_code + '%') | crm_models.LocationCriteria.location_code.like('%' + deal_state_code + '%'))
-        if self.property.property_type != 2:
-            number_units = self.property.units
-            query = query.filter(crm_models.InvestmentCriteria.minimum_units <= number_units)
-            query = query.filter(crm_models.InvestmentCriteria.maximum_units >= number_units)
-        return query.all()
+        return [contact for contact in current_user.contacts if contact.hasMatchingCriteriaForDeal(deal)]
 
-class Property(BaseModel):
+class Property(db.Model):
     __tablename__ = 'property'
+    id = db.Column(db.Integer, primary_key=True)
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
     property_type = db.Column(db.Integer)
     address = db.relationship('Address', uselist=False)

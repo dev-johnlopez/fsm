@@ -33,9 +33,11 @@ class User(db.Model, UserMixin):
     current_login_ip = db.Column(db.String(40))
     login_count = db.Column(db.Integer)
     user_contact_id = db.Column(db.Integer, db.ForeignKey('usercontact.id'))
-    user_contact = db.relationship('UserContact', uselist=False)
+    user_contact = db.relationship('UserContact', uselist=False, backref='user')
     roles = db.relationship('Role', secondary=roles_users,
                             backref=db.backref('users', lazy='dynamic'))
+    deals = db.relationship('Deal', backref='created_by', lazy=True)
+    contacts = db.relationship('Contact', backref='created_by', lazy=True)
 
     def __init__(self, **kwargs):
         self.user_contact = UserContact()
@@ -45,13 +47,16 @@ class User(db.Model, UserMixin):
         return '%s' % (self.email)
 
     def getUserContacts(self):
-        return Contact.query.filter_by(create_user_id=self.id).filter_by(active=True).all()
+        return [contact for contact in self.contacts if contact.active]
 
     def searchContactsByEmail(self, email):
-        return Contact.query.filter_by(create_user_id=self.id).filter_by(email=email).first()
+        for contact in self.contacts:
+            if contact.email == email and contact.active:
+                return contact
+        return None
 
     def getDeals(self):
-        return Deal.query.filter_by(create_user_id=self.id).all()
+        return self.deals
 
 class UserContact(db.Model):
 

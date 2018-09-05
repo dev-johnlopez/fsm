@@ -63,8 +63,8 @@ class ExcelReader():
                         str(dfRow['State'])
                     )
                     contact.investment_criteria.append(investment_criteria)
-                print(property_types)
-                db.session.add(contact)
+                current_user.contacts.append(contact)
+        db.session.add(current_user)
         db.session.commit()
 
     @classmethod

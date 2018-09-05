@@ -1,7 +1,49 @@
 from app import db
+from flask_security import current_user
 from app.search import add_to_index, remove_from_index, query_index
 from transitions import Machine
 from sqlalchemy.ext.declarative import declared_attr
+import datetime
+
+
+class AuditMixin(object):
+    #AuditMixin
+    #Mixin for models, adds 4 columns to stamp, time and user on creation and modification
+    #will create the following columns:
+
+    #:created on:
+    #:changed on:
+    #:created by:
+    #:changed by:
+    created_on = db.Column(db.DateTime, default=datetime.datetime.now, nullable=False)
+    changed_on = db.Column(db.DateTime, default=datetime.datetime.now,
+                        onupdate=datetime.datetime.now, nullable=False)
+
+    @declared_attr
+    def created_by_fk(cls):
+        return db.Column(db.Integer, db.ForeignKey('user.id'),
+                      default=cls.get_user_id, nullable=False)
+
+    @declared_attr
+    def created_by(cls):
+        return db.relationship("User", primaryjoin='%s.created_by_fk == user.id' % cls.__name__, enable_typechecks=False)
+
+    @declared_attr
+    def changed_by_fk(cls):
+        return db.Column(db.Integer, db.ForeignKey('user.id'),
+                      default=cls.get_user_id, onupdate=cls.get_user_id, nullable=False)
+
+    @declared_attr
+    def changed_by(cls):
+        return db.relationship("User", primaryjoin='%s.changed_by_fk == user.id' % cls.__name__, enable_typechecks=False)
+
+    @classmethod
+    def get_user_id(cls):
+        try:
+            return current_user.id
+        except Exception as e:
+            # log.warning("AuditMixin Get User ID {0}".format(str(e)))
+            return None
 
 
 class StateMixin(object):

@@ -1,4 +1,5 @@
 from flask_admin import Admin
+from flask_admin.model import BaseModelView
 from flask_admin.contrib.sqla import ModelView
 from app.crm.models import Contact
 from app.deals.models import Deal, Property, Address

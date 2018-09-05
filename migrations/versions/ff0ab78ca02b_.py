@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: b47f2162c613
+Revision ID: ff0ab78ca02b
 Revises: 
-Create Date: 2018-09-05 09:50:55.293894
+Create Date: 2018-09-05 10:57:00.636760
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'b47f2162c613'
+revision = 'ff0ab78ca02b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -35,7 +35,7 @@ def upgrade():
     )
     op.create_table('contact',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_date', sa.DateTime(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
     sa.Column('first_name', sa.String(length=255), nullable=True),
     sa.Column('last_name', sa.String(length=255), nullable=True),
@@ -44,13 +44,12 @@ def upgrade():
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('referral_source', sa.String(length=255), nullable=True),
     sa.Column('investment_strategy', sa.String(length=255), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['create_user_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('deal',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_date', sa.DateTime(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('list_price', sa.Integer(), nullable=True),
     sa.Column('rehab_amount', sa.Integer(), nullable=True),
     sa.Column('after_repair_value', sa.Integer(), nullable=True),
@@ -67,40 +66,31 @@ def upgrade():
     sa.Column('net_operating_income', sa.Integer(), nullable=True),
     sa.Column('cap_rate', sa.String(length=255), nullable=True),
     sa.Column('property_id', sa.Integer(), nullable=True),
-    sa.Column('status', sa.String(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['create_user_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['property_id'], ['property.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('investmentcriteria',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_date', sa.DateTime(), nullable=False),
     sa.Column('contact_id', sa.Integer(), nullable=True),
     sa.Column('property_type', sa.Integer(), nullable=True),
     sa.Column('flip', sa.Integer(), nullable=True),
     sa.Column('rental', sa.Integer(), nullable=True),
     sa.Column('minimum_units', sa.Integer(), nullable=True),
     sa.Column('maximum_units', sa.Integer(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['contact_id'], ['contact.id'], ),
-    sa.ForeignKeyConstraint(['create_user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('locationcriteria',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_date', sa.DateTime(), nullable=False),
     sa.Column('location_type', sa.String(length=255), nullable=True),
     sa.Column('location_code', sa.String(length=255), nullable=True),
     sa.Column('criteria_id', sa.Integer(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['create_user_id'], ['user.id'], ),
     sa.ForeignKeyConstraint(['criteria_id'], ['investmentcriteria.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('property',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('create_date', sa.DateTime(), nullable=False),
     sa.Column('address_id', sa.Integer(), nullable=True),
     sa.Column('property_type', sa.Integer(), nullable=True),
     sa.Column('units', sa.Integer(), nullable=True),
@@ -111,9 +101,7 @@ def upgrade():
     sa.Column('garage_type', sa.String(length=255), nullable=True),
     sa.Column('last_sale_date', sa.Date(), nullable=True),
     sa.Column('owner_occupied', sa.Boolean(), nullable=True),
-    sa.Column('create_user_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['address_id'], ['address.id'], ),
-    sa.ForeignKeyConstraint(['create_user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('role',

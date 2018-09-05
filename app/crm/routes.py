@@ -18,7 +18,7 @@ def search():
     form = SearchForm()
     results = []
     if form.validate_on_submit():
-        query = Contact.query.filter_by(create_user_id=current_user.id)
+        query = Contact.query.filter_by(user_id=current_user.id)
         if form.first_name.data:
             query = query.filter(Contact.first_name.like('%' + form.first_name.data + '%'))
         if form.last_name.data:
@@ -44,7 +44,8 @@ def create():
         form.investment_criteria = criteria
         contact.investment_criteria = []
         form.populate_obj(obj=contact)
-        db.session.add(contact)
+        current_user.contacts.append(contact)
+        db.session.add(current_user)
         db.session.commit()
         return redirect(url_for('crm.view', contact_id=contact.id))
     elif len(form.errors):

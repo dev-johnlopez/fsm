@@ -143,7 +143,7 @@ class RetailProperty(CommercialProperty):
     def __init__(self, **kwargs):
         super(RetailProperty, self).__init__(**kwargs)
 
-class Address(BaseModel):
+class Address(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     line_1 = db.Column(db.String(255))
     line_2 = db.Column(db.String(255))
@@ -165,10 +165,7 @@ class Address(BaseModel):
         return '{}, {}, {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code)
 
     def geocode(self):
-        print(geolocator.geocode("175 5th Avenue NYC"))
-        print('{} {} {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code))
         location = geolocator.geocode('{} {} {} {}'.format(self.line_1, self.city, self.state_province, self.postal_code))
-        print(location)
         if location is not None:
             self.latitude = location.latitude
             self.longitude = location.longitude
